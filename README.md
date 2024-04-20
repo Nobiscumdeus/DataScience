@@ -1,6 +1,12 @@
-<div><h2>Welcome to my Data Science Portfolio! This repository is a showcase of my data science projects, demonstrating my skills, expertise, and passion for leveraging data to derive insights and solve real-world problems. Whether you're a recruiter, hiring manager, or fellow data enthusiast, I invite you to explore my projects and get a glimpse into my journey in the field of data science.</h2>h2> </div>
-<div>. I thrive on tackling complex challenges, uncovering hidden patterns in data, and translating insights into actionable solutions.</div>
-<div>Skills<hr>
+<div>
+  <h2>Welcome to my Data Science Portfolio! </h2> <hr/>
+<h4>This repository is a showcase of my data science projects, demonstrating my skills, expertise, and passion for leveraging data to derive insights and solve real-world problems. Whether you're a recruiter, hiring manager, or fellow data enthusiast, I invite you to explore my projects and get a glimpse into my journey in the field of data science.</h4>
+</div>
+<div> <strong>
+  I thrive on tackling complex challenges, uncovering hidden patterns in data, and translating insights into actionable solutions.
+</strong> </div>
+<div>
+  Skills<hr>
   <ul>
   <li>Data Analysis and Visualization</li>
 <li>Machine Learning and Predictive Modeling</li>
