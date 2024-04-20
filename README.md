@@ -1,8 +1,13 @@
-<h1> Unveiling Insights : Titanic Data Analysis </h1>
-<div>
-<h3>Hey Github Community!  Excited to share a snapshot of my Titanic data analysis project. In this exploration , I have delved into the well known passenger data to uncover intriguing patterns and trends from this historical event. </h3>
-<h3> This code is well documented with appropriate explanations that makes the absolute beginner understand perfectly the Data Science and Machine Learning workflow </h3>
-</div>
-<div>
-<h3> Feel free to contribute and share your thoughts, or suggest new avenues to explore. We can make this analysis more richer and more insightful </h3>
-</div>
+<div><h2>Welcome to my Data Science Portfolio! This repository is a showcase of my data science projects, demonstrating my skills, expertise, and passion for leveraging data to derive insights and solve real-world problems. Whether you're a recruiter, hiring manager, or fellow data enthusiast, I invite you to explore my projects and get a glimpse into my journey in the field of data science.</h2>h2> </div>
+<div>. I thrive on tackling complex challenges, uncovering hidden patterns in data, and translating insights into actionable solutions.</div>
+<div>Skills<hr>
+  <ul>
+  <li>Data Analysis and Visualization</li>
+<li>Machine Learning and Predictive Modeling</li>
+<li>SQL and Database Management</li>
+<li>Data Cleaning and Preprocessing</li>
+    
+  </ul>
+
+
+<div>Feel free to contact me, If you're interested in collaborating on projects, discussing opportunities, or simply connecting with me, feel free to reach out via email at [your-email@example.com] or connect with me on LinkedIn.</div>
