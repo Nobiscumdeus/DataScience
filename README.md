@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # My Data Science Playground
 
 Welcome to my Data Science Playground! This repository is where I explore various Data Science projects from the ground up, experiment with different techniques, and showcase my learning journey in the realm of data.
@@ -58,3 +59,7 @@ This repository is licensed under the MIT License. For more details, please see 
 ---
 
 Thanks for visiting my Data Science Playground! I hope you find inspiration and insights within these projects. Happy exploring! 🚀
+=======
+
+
+<div>Feel free to contact me, If you're interested in collaborating on projects, discussing opportunities </div>
