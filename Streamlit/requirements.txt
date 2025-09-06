@@ -1,0 +1,9 @@
+# Core Streamlit dependencies
+streamlit>=1.49.0
+pandas>=2.0.0
+numpy>=1.24.0
+plotly>=5.0.0
+
+# Optional: Add other lightweight dependencies if needed
+# matplotlib>=3.7.0
+# seaborn>=0.12.0
