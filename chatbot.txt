@@ -1,0 +1,203 @@
+# Lightweight Student Admission Chatbot
+
+import os
+import json
+import uvicorn
+import spacy
+import numpy as np
+import fastapi
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+from typing import List, Dict, Optional
+import torch
+import torch.nn as nn
+
+# Configuration Management
+class Config:
+    """Centralized configuration management"""
+    DATABASE_PATH = 'data/student_database.json'
+    INTENTS_PATH = 'data/intents.json'
+    MODEL_PATH = 'models/intent_model.pt'
+    EMBEDDING_MODEL = 'all-MiniLM-L6-v2'
+
+# Lightweight Intent Classification Model
+class IntentClassifier(nn.Module):
+    def __init__(self, input_size, hidden_size, num_classes):
+        super().__init__()
+        self.fc1 = nn.Linear(input_size, hidden_size)
+        self.relu = nn.ReLU()
+        self.fc2 = nn.Linear(hidden_size, num_classes)
+    
+    def forward(self, x):
+        x = self.fc1(x)
+        x = self.relu(x)
+        x = self.fc2(x)
+        return x
+
+# Database Handler
+class DatabaseManager:
+    def __init__(self, db_path=Config.DATABASE_PATH):
+        self.db_path = db_path
+        self.load_database()
+    
+    def load_database(self):
+        try:
+            with open(self.db_path, 'r') as f:
+                self.database = json.load(f)
+        except FileNotFoundError:
+            self.database = {"students": [], "faqs": []}
+    
+    def search_students(self, query):
+        return [
+            student for student in self.database['students']
+            if all(q.lower() in str(student).lower() for q in query.split())
+        ]
+    
+    def get_faqs(self):
+        return self.database.get('faqs', [])
+
+# Natural Language Processing Utilities
+class NLPProcessor:
+    def __init__(self):
+        # Lightweight NLP models
+        self.nlp = spacy.load('en_core_web_sm')
+        self.embedding_model = SentenceTransformer(Config.EMBEDDING_MODEL)
+    
+    def preprocess_text(self, text):
+        """Lightweight text preprocessing"""
+        doc = self.nlp(text.lower())
+        return ' '.join([token.lemma_ for token in doc if not token.is_stop and token.is_alpha])
+    
+    def get_embeddings(self, text):
+        """Generate sentence embeddings"""
+        return self.embedding_model.encode([text])[0]
+    
+    def semantic_similarity(self, text1, text2):
+        """Calculate semantic similarity between texts"""
+        emb1 = self.get_embeddings(text1)
+        emb2 = self.get_embeddings(text2)
+        return cosine_similarity([emb1], [emb2])[0][0]
+
+# Request Models
+class QueryRequest(BaseModel):
+    query: str
+    context: Optional[Dict] = None
+
+class StudentSearchRequest(BaseModel):
+    search_terms: str
+
+# Chatbot Core Logic
+class AdmissionChatbot:
+    def __init__(self):
+        self.db_manager = DatabaseManager()
+        self.nlp_processor = NLPProcessor()
+        self.intent_model = self._load_intent_model()
+    
+    def _load_intent_model(self):
+        """Load pre-trained lightweight intent classification model"""
+        try:
+            model = torch.load(Config.MODEL_PATH)
+            model.eval()
+            return model
+        except FileNotFoundError:
+            # Create a simple fallback model if not found
+            return IntentClassifier(input_size=384, hidden_size=64, num_classes=5)
+    
+    def process_query(self, query: str):
+        """Main query processing method"""
+        preprocessed_query = self.nlp_processor.preprocess_text(query)
+        
+        # Intent matching using semantic similarity
+        intents = [
+            "admission_info", 
+            "course_details", 
+            "application_status", 
+            "fee_inquiry", 
+            "general_question"
+        ]
+        
+        faq_matches = self.db_manager.get_faqs()
+        best_match = max(
+            faq_matches, 
+            key=lambda faq: self.nlp_processor.semantic_similarity(query, faq['question'])
+        )
+        
+        return {
+            "processed_query": preprocessed_query,
+            "best_intent": best_match.get('intent', 'general_question'),
+            "response": best_match.get('answer', 'I can help you with that. Could you provide more details?')
+        }
+    
+    def search_students(self, search_terms: str):
+        """Search student database"""
+        return self.db_manager.search_students(search_terms)
+
+# FastAPI Application
+app = FastAPI(
+    title="Student Admission Chatbot API",
+    description="Lightweight API for student admission queries",
+    version="1.0.0"
+)
+
+# Initialize chatbot
+chatbot = AdmissionChatbot()
+
+@app.post("/query")
+async def process_query(request: QueryRequest):
+    """Main query processing endpoint"""
+    try:
+        result = chatbot.process_query(request.query)
+        return {
+            "status": "success",
+            "data": result
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/search_students")
+async def search_students(request: StudentSearchRequest):
+    """Student search endpoint"""
+    try:
+        results = chatbot.search_students(request.search_terms)
+        return {
+            "status": "success",
+            "results": results
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Utility Functions for Model Training (Placeholder)
+def train_intent_model():
+    """Placeholder for model training logic"""
+    pass
+
+def main():
+    """Application entry point"""
+    uvicorn.run(
+        "main:app", 
+        host="0.0.0.0", 
+        port=8000, 
+        reload=True
+    )
+
+if __name__ == "__main__":
+    main()
+
+# Requirements for setup
+'''
+Required Libraries:
+- fastapi
+- uvicorn
+- spacy
+- sentence-transformers
+- scikit-learn
+- torch
+- pydantic
+- numpy
+
+Installation Command:
+pip install fastapi uvicorn spacy sentence-transformers scikit-learn torch pydantic numpy
+python -m spacy download en_core_web_sm
+'''

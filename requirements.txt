@@ -1,0 +1,26 @@
+# requirements.txt
+# Python version: 3.12
+pandas
+numpy
+scikit-learn
+ipykernel
+matplotlib
+seaborn
+statsmodels
+jupyterlab
+
+tensorflow
+
+xgboost
+streamlit
+jupyter
+
+
+requests
+scrapy
+openpyxl
+sqlalchemy
+psycopg2
+beautifulsoup4
+scipy
+kagglehub
