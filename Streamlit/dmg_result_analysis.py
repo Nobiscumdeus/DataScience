@@ -276,7 +276,7 @@ def main():
             
             # Show data preview
             st.sidebar.subheader("📋 Data Preview:")
-            st.sidebar.dataframe(df.head(2))
+            st.sidebar.dataframe(df.head(2).reset_index(drop=True), use_container_width=True,hide_index=True)
             
             # Process data
             df, subject_groups = calculate_subject_averages(df)
@@ -329,7 +329,7 @@ def main():
                         'Low Risk': '#00aa44'
                     }
                 )
-                st.plotly_chart(fig_pie, use_container_width=True)
+                st.plotly_chart(fig_pie, use_container_width=True,hide_index=True)
             
             with col2:
                 # Subject averages bar chart
@@ -350,7 +350,7 @@ def main():
                         text=[f"{v:.1f}%" for v in subject_avgs.values()]
                     )
                     fig_bar.update_traces(marker_color='lightblue', textposition='outside')
-                    st.plotly_chart(fig_bar, use_container_width=True)
+                    st.plotly_chart(fig_bar, use_container_width=True,hide_index=True)
                 else:
                     st.info("No subject averages available for chart")
             
@@ -400,7 +400,7 @@ def main():
             st.dataframe(
                 filtered_risk[['Student', 'Overall_Average', 'Risk_Level', 
                              'Declining_Subjects', 'Missing_Assessments']],
-                use_container_width=True
+                use_container_width=True,hide_index=True
             )
             
             # Peer Tutoring Recommendations
@@ -410,7 +410,7 @@ def main():
                 col1, col2 = st.columns([2, 1])
                 
                 with col1:
-                    st.dataframe(peer_matches, use_container_width=True)
+                    st.dataframe(peer_matches, use_container_width=True,hide_index=True)
                 
                 with col2:
                     st.subheader("📊 Tutor Workload")
@@ -586,7 +586,7 @@ def main():
                         title=f"{selected_subject.title()} Score Distribution",
                         labels={'x': 'Average Score (%)', 'y': 'Number of Students'}
                     )
-                    st.plotly_chart(fig_hist, use_container_width=True)
+                    st.plotly_chart(fig_hist, use_container_width=True,hide_index=True)
                     
                     # Show subject-specific data with sorting
                     st.subheader(f"📋 {selected_subject.title()} Detailed Scores")
@@ -604,7 +604,7 @@ def main():
                     elif subject_sort_option == 'Name (A-Z)':
                         subject_data = subject_data.sort_values(df.columns[0], ascending=True)
                     
-                    st.dataframe(subject_data, use_container_width=True)
+                    st.dataframe(subject_data, use_container_width=True,hide_index=True)
             else:
                 st.info("No subject-specific analysis available. Ensure your columns contain subject names (Physio, Anatomy, Bich).")
             
@@ -663,7 +663,7 @@ def main():
             'Bich CA1': [65, 70, 75],
             'Bich CA2': [68, 72, 77]
         }
-        st.dataframe(pd.DataFrame(sample_data))
+        st.dataframe(pd.DataFrame(sample_data),hide_index=True)
         
         st.info("💡 **Tips:**\n- Column names are case-insensitive\n- Subjects can be abbreviated (Physio, Anatomy, Bich)\n- Assessment names can vary (CA1, CA2, Quiz 1, Test 2, etc.)")
 
